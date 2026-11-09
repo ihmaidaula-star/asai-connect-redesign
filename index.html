@@ -8,6 +8,10 @@
   <meta name="theme-color" content="#f7f5ef">
   <meta name="description" content="Asai connects Africans and the diaspora with culturally rooted mental wellness, community, spiritual wellness and personal growth.">
 
+  <meta property="og:title" content="Asai Community — A Space to Belong">
+  <meta property="og:description" content="Your culture matters. Your wellbeing matters. Discover a space where care, community and personal growth come together.">
+  <meta property="og:type" content="website">
+
   <title>Asai Community — Care That Feels Like Home</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,10 +24,22 @@
 
 <body>
 
+  <!-- CINEMATIC INTRO -->
+  <div class="cinematic-loader" id="cinematicLoader" aria-label="Asai Community introduction">
+    <div class="loader-content">
+      <div class="loader-symbol">a.</div>
+      <div class="loader-name">ASAI COMMUNITY</div>
+      <div class="loader-line"><span></span></div>
+      <p>A SPACE TO BELONG</p>
+    </div>
+  </div>
+
+  <!-- ANNOUNCEMENT -->
   <div class="announcement">
     <p>A space to feel understood, supported and at home.</p>
   </div>
 
+  <!-- NAVIGATION -->
   <header class="site-header" id="top">
     <nav class="navbar container" aria-label="Main navigation">
 
@@ -32,12 +48,12 @@
         <span class="brand-name">asai<span>community</span></span>
       </a>
 
-      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">
+      <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false" aria-controls="main-navigation">
         <span></span>
         <span></span>
       </button>
 
-      <div class="nav-links">
+      <div class="nav-links" id="main-navigation">
         <a href="#about">Our story</a>
         <a href="#services">Our spaces</a>
         <a href="#journey">Your journey</a>
@@ -53,75 +69,69 @@
 
   <main>
 
-    <!-- HERO -->
-    <section class="hero section-padding">
-      <div class="container hero-grid">
+    <!-- CINEMATIC HERO -->
+    <section class="hero-cinematic">
 
-        <div class="hero-content">
-          <span class="eyebrow">
-            <span class="eyebrow-line"></span>
-            WELLNESS, ROOTED IN BELONGING
-          </span>
+      <div class="cinematic-background">
+        <img
+  src="https://images.unsplash.com/photo-1490682143684-14369e18dce8?auto=format&fit=crop&w=2400&q=90"
+  alt="Golden sunrise illuminating a peaceful mountain landscape"
+  fetchpriority="high"
+>
+      </div>
 
-          <h1>
-            You deserve care
-            that feels like
-            <em>home.</em>
-          </h1>
+      <div class="hero-shade"></div>
+      <div class="hero-grain"></div>
 
-          <p class="hero-description">
-            Your story matters. Your culture matters. Your wellbeing matters.
-            Discover a space where therapy, community, spiritual wellness
-            and personal growth come together.
-          </p>
+      <div class="hero-cinematic-content container">
 
-          <div class="hero-actions">
-            <a href="#services" class="button button-dark">
-              Find your space <span>↗</span>
-            </a>
-
-            <a href="#about" class="text-link">
-              Discover Asai <span>→</span>
-            </a>
-          </div>
-
-          <div class="hero-note">
-            <span class="note-icon">✳</span>
-            <span>Designed by Africans, for Africans and the diaspora.</span>
-          </div>
+        <div class="hero-overline">
+          <span></span>
+          A NEW PERSPECTIVE ON WELLNESS
         </div>
 
-        <div class="hero-visual">
-          <div class="hero-image-main">
-            <img
-              src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1100&q=85"
-              alt="Friends enjoying a moment of connection outdoors"
-            >
-          </div>
+        <h1 class="cinematic-title">
+          <span>Find your</span>
+          <span class="title-indent">place in the</span>
+          <span class="title-highlight">world.</span>
+        </h1>
 
-          <div class="hero-image-small">
-            <img
-              src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=500&q=85"
-              alt="Portrait of a smiling woman"
-            >
-          </div>
+        <div class="cinematic-bottom">
 
-          <div class="floating-note">
-            <span>✳</span>
-            <div>
-              <strong>You belong here.</strong>
-              <small>Come as you are.</small>
-            </div>
-          </div>
+          <p>
+            A home for your wellbeing, your identity and every part
+            of the person you are. Rooted in culture. Connected by community.
+          </p>
 
-          <div class="hero-decoration">ASAI · ASAI · ASAI ·</div>
+          <a href="#services" class="cinematic-discover">
+            <span class="discover-circle">↘</span>
+            <span>DISCOVER YOUR SPACE</span>
+          </a>
+
         </div>
 
       </div>
+
+      <div class="hero-side-label">
+        WELLNESS WITHOUT LOSING YOURSELF
+      </div>
+
+      <div class="hero-index">
+        <span>01</span>
+        <span class="index-line"></span>
+        <span>04</span>
+      </div>
+
+      <a href="#about" class="hero-scroll">
+        SCROLL TO EXPLORE
+        <span></span>
+      </a>
+
     </section>
 
     <!-- INTRODUCTION -->
     <section class="intro section-padding" id="about">
+
       <div class="container intro-grid">
 
         <div class="intro-label">
@@ -130,6 +140,7 @@
         </div>
 
         <div class="intro-content">
+
           <h2>
             Wellness, reimagined
             <span>for Africa.</span>
@@ -150,6 +161,7 @@
           <a href="#services" class="text-link">
             Get to know our spaces <span>→</span>
           </a>
+
         </div>
 
         <div class="intro-image">
@@ -161,13 +173,16 @@
         </div>
 
       </div>
+
     </section>
 
     <!-- SERVICES -->
     <section class="services section-padding" id="services">
+
       <div class="container">
 
         <div class="section-heading">
+
           <div>
             <span class="eyebrow">02 / EXPLORE ASAI</span>
             <h2>Four dimensions.<br><em>One home.</em></h2>
@@ -177,84 +192,114 @@
             Wherever you are in your journey, there's a space
             here that meets you where you are.
           </p>
+
         </div>
 
         <div class="service-grid">
 
           <article class="service-card service-well">
+
             <div class="service-top">
               <span class="service-number">01</span>
               <span class="service-icon">✳</span>
             </div>
+
             <span class="service-category">PROFESSIONAL CARE</span>
+
             <h3>WellAsai</h3>
+
             <p>
               Clinical mental health support with professionals
               who understand your context before you explain it.
             </p>
+
             <a href="#contact" class="service-link">
               Explore WellAsai <span>↗</span>
             </a>
+
           </article>
 
           <article class="service-card service-nest">
+
             <div class="service-top">
               <span class="service-number">02</span>
               <span class="service-icon">◌</span>
             </div>
+
             <span class="service-category">COMMUNITY & CONNECTION</span>
+
             <h3>NestAsai</h3>
+
             <p>
               Find your people through supportive communities,
               shared experiences and spaces where you belong.
             </p>
+
             <a href="#contact" class="service-link">
               Explore NestAsai <span>↗</span>
             </a>
+
           </article>
 
           <article class="service-card service-soul">
+
             <div class="service-top">
               <span class="service-number">03</span>
               <span class="service-icon">☼</span>
             </div>
+
             <span class="service-category">SPIRITUAL WELLNESS</span>
+
             <h3>SoulAsai</h3>
+
             <p>
               Make room for reflection, journaling, inner peace
               and a deeper understanding of yourself.
             </p>
+
             <a href="#contact" class="service-link">
               Explore SoulAsai <span>↗</span>
             </a>
+
           </article>
 
           <article class="service-card service-bloom">
+
             <div class="service-top">
               <span class="service-number">04</span>
               <span class="service-icon">✿</span>
             </div>
+
             <span class="service-category">GROWTH & LEARNING</span>
+
             <h3>BloomAsai</h3>
+
             <p>
               Discover opportunities for personal growth,
               learning and everyday wellbeing.
             </p>
+
             <a href="#contact" class="service-link">
               Explore BloomAsai <span>↗</span>
             </a>
+
           </article>
 
         </div>
+
       </div>
+
     </section>
 
     <!-- FIND YOUR SPACE -->
     <section class="find-space section-padding" id="find-space">
+
       <div class="container find-space-grid">
 
         <div class="find-space-content">
+
           <span class="eyebrow">03 / YOUR SPACE</span>
+
           <h2>
             How are you
             <em>arriving today?</em>
@@ -266,7 +311,8 @@
           </p>
 
           <div class="mood-options">
-            <button class="mood-option" data-mood="heavy">
+
+            <button class="mood-option" data-mood="heavy" aria-pressed="false">
               <span class="mood-symbol">↓</span>
               <span>
                 <strong>Heavy</strong>
@@ -275,7 +321,7 @@
               <span class="mood-arrow">↗</span>
             </button>
 
-            <button class="mood-option" data-mood="lonely">
+            <button class="mood-option" data-mood="lonely" aria-pressed="false">
               <span class="mood-symbol">○</span>
               <span>
                 <strong>Lonely</strong>
@@ -284,7 +330,7 @@
               <span class="mood-arrow">↗</span>
             </button>
 
-            <button class="mood-option" data-mood="restless">
+            <button class="mood-option" data-mood="restless" aria-pressed="false">
               <span class="mood-symbol">✳</span>
               <span>
                 <strong>Restless</strong>
@@ -293,7 +339,7 @@
               <span class="mood-arrow">↗</span>
             </button>
 
-            <button class="mood-option" data-mood="ready">
+            <button class="mood-option" data-mood="ready" aria-pressed="false">
               <span class="mood-symbol">↑</span>
               <span>
                 <strong>Ready</strong>
@@ -301,41 +347,52 @@
               </span>
               <span class="mood-arrow">↗</span>
             </button>
+
           </div>
 
           <div class="mood-result" aria-live="polite" hidden></div>
+
         </div>
 
         <div class="find-space-visual">
+
           <img
             src="https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1000&q=85"
             alt="Sunlight falling across a peaceful natural landscape"
             loading="lazy"
           >
+
           <div class="visual-caption">
             <span>YOUR JOURNEY.</span>
             <span>YOUR PACE.</span>
             <span>YOUR NEXT STEP.</span>
           </div>
+
         </div>
 
       </div>
+
     </section>
 
     <!-- CONFIDENTIALITY -->
     <section class="trust section-padding" id="trust">
+
       <div class="container">
 
         <div class="trust-heading">
+
           <span class="eyebrow">04 / A SPACE BUILT ON TRUST</span>
+
           <h2>
             Nothing you bring here
             <em>should be taken lightly.</em>
           </h2>
+
           <p>
             Privacy and safety are essential to meaningful care.
             Understand the commitments Asai makes to its community.
           </p>
+
         </div>
 
         <div class="trust-grid">
@@ -375,21 +432,26 @@
         </p>
 
       </div>
+
     </section>
 
     <!-- JOURNEY -->
     <section class="journey section-padding" id="journey">
+
       <div class="container">
 
         <div class="section-heading">
+
           <div>
             <span class="eyebrow">05 / THE ASAI EXPERIENCE</span>
             <h2>Your journey.<br><em>Your own pace.</em></h2>
           </div>
+
           <p>
             You don't need to have everything figured out.
             Every meaningful journey begins somewhere.
           </p>
+
         </div>
 
         <div class="journey-grid">
@@ -421,25 +483,32 @@
         </div>
 
       </div>
+
     </section>
 
     <!-- COMMUNITY -->
     <section class="community section-padding" id="community">
+
       <div class="container community-layout">
 
         <div class="community-intro">
+
           <span class="eyebrow">06 / THE PEOPLE OF ASAI</span>
+
           <h2>
             Healing feels different
             <em>when you're not alone.</em>
           </h2>
+
           <p>
             Meaningful support begins with connection.
             Discover the value of finding people who understand.
           </p>
+
           <a href="#services" class="button button-light">
             Explore our spaces <span>↗</span>
           </a>
+
         </div>
 
         <div class="community-image">
@@ -451,10 +520,12 @@
         </div>
 
       </div>
+
     </section>
 
     <!-- PRACTITIONERS -->
     <section class="practitioners section-padding" id="practitioners">
+
       <div class="container practitioner-grid">
 
         <div class="practitioner-image">
@@ -466,45 +537,62 @@
         </div>
 
         <div class="practitioner-content">
+
           <span class="eyebrow">07 / FOR PRACTITIONERS</span>
+
           <h2>
             Your work can
             <em>make someone feel seen.</em>
           </h2>
+
           <p>
             Therapists, coaches, facilitators and community
             specialists — Asai invites professionals who share
             its commitment to culturally aware, compassionate care.
           </p>
+
           <a href="#contact" class="button button-dark">
             Join the Asai community <span>↗</span>
           </a>
+
         </div>
 
       </div>
+
     </section>
 
     <!-- EMERGENCY -->
     <section class="emergency section-padding" id="emergency">
+
       <div class="container">
 
         <div class="emergency-heading">
+
           <span class="eyebrow">08 / WHEN YOU NEED HELP NOW</span>
-          <h2>Support should never<br><em>be out of reach.</em></h2>
+
+          <h2>
+            Support should never<br>
+            <em>be out of reach.</em>
+          </h2>
+
           <p>
             Asai is not an emergency service. If you or someone
             you know is in immediate danger, contact the appropriate
             emergency or crisis support service.
           </p>
+
         </div>
 
         <div class="emergency-primary">
+
           <div>
             <span>GENERAL EMERGENCY</span>
             <h3>National emergency line</h3>
             <p>Police, ambulance and general emergencies in Nigeria.</p>
           </div>
+
           <a href="tel:112">112 <span>↗</span></a>
+
         </div>
 
         <p class="emergency-disclaimer">
@@ -514,35 +602,46 @@
         </p>
 
       </div>
+
     </section>
 
     <!-- FINAL CTA -->
     <section class="final-cta section-padding" id="contact">
+
       <div class="container final-cta-inner">
+
         <span class="eyebrow">YOUR SPACE IS WAITING</span>
+
         <h2>
           You don't have to
           figure it all out <em>alone.</em>
         </h2>
+
         <p>
           Start wherever you are. Take the next step when you're ready.
         </p>
+
         <a href="#services" class="button button-light">
           Find your space <span>↗</span>
         </a>
+
         <div class="cta-decoration">ASAI COMMUNITY ✳</div>
+
       </div>
+
     </section>
 
   </main>
 
   <!-- FOOTER -->
   <footer class="site-footer">
+
     <div class="container">
 
       <div class="footer-main">
 
         <div class="footer-brand">
+
           <a href="#top" class="brand footer-logo">
             <span class="brand-mark">a.</span>
             <span class="brand-name">asai<span>community</span></span>
@@ -552,39 +651,53 @@
             A space for Africans and the diaspora to find
             connection, care and a sense of belonging.
           </p>
+
         </div>
 
         <div class="footer-column">
+
           <h4>EXPLORE</h4>
+
           <a href="#about">Our story</a>
           <a href="#services">Our spaces</a>
           <a href="#journey">Your journey</a>
           <a href="#community">Community</a>
+
         </div>
 
         <div class="footer-column">
+
           <h4>WELLNESS</h4>
+
           <a href="#services">WellAsai</a>
           <a href="#services">NestAsai</a>
           <a href="#services">SoulAsai</a>
           <a href="#services">BloomAsai</a>
+
         </div>
 
         <div class="footer-column">
+
           <h4>GET SUPPORT</h4>
+
           <a href="#practitioners">For practitioners</a>
           <a href="#trust">Privacy & safety</a>
           <a href="#emergency">Emergency support</a>
+
         </div>
 
       </div>
 
       <div class="footer-bottom">
+
         <span>© 2026 Asai Community. All rights reserved.</span>
+
         <a href="#top">Back to top ↑</a>
+
       </div>
 
     </div>
+
   </footer>
 
 </body>
