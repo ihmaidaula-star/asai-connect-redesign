@@ -1,51 +1,77 @@
 
 /* =========================================================
-   ASAI COMMUNITY — CINEMATIC INTERACTIONS
+   ASAI COMMUNITY
+   CINEMATIC INTERACTION ENGINE
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
   "use strict";
 
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
   // -------------------------------------------------------
-  // 1. CINEMATIC INTRO LOADER
+  // 1. CINEMATIC INTRO
   // -------------------------------------------------------
 
   const loader = document.getElementById("cinematicLoader");
 
   if (loader) {
-    const hasVisited = sessionStorage.getItem("asaiVisited");
+    try {
+      const hasVisited = sessionStorage.getItem("asaiVisited");
 
-    if (hasVisited) {
+      if (hasVisited || prefersReducedMotion) {
+        loader.classList.add("finished");
+      } else {
+        document.body.classList.add("loading");
+
+        const finishIntro = () => {
+          setTimeout(() => {
+            loader.classList.add("finished");
+            document.body.classList.remove("loading");
+
+            try {
+              sessionStorage.setItem("asaiVisited", "true");
+            } catch (error) {
+              // Session storage may be unavailable.
+            }
+          }, 1900);
+        };
+
+        if (document.readyState === "complete") {
+          finishIntro();
+        } else {
+          window.addEventListener("load", finishIntro, {
+            once: true
+          });
+        }
+      }
+    } catch (error) {
       loader.classList.add("finished");
-    } else {
-      document.body.classList.add("loading");
-
-      window.addEventListener("load", () => {
-        setTimeout(() => {
-          loader.classList.add("finished");
-          document.body.classList.remove("loading");
-          sessionStorage.setItem("asaiVisited", "true");
-        }, 1900);
-      });
     }
   }
 
   // -------------------------------------------------------
-  // 2. SCROLL REVEAL ANIMATIONS
+  // 2. CINEMATIC SCROLL REVEALS
   // -------------------------------------------------------
 
   const revealSelectors = [
-    ".intro",
+    ".intro-content",
+    ".intro-image",
     ".service-card",
     ".mood-option",
-    ".trust",
-    ".journey",
-    ".community",
-    ".practitioners",
-    ".emergency",
-    ".final-cta",
-    ".section-heading",
-    ".eyebrow"
+    ".trust-heading",
+    ".trust-card",
+    ".journey-step",
+    ".community-intro",
+    ".community-image",
+    ".practitioner-content",
+    ".practitioner-image",
+    ".emergency-heading",
+    ".emergency-primary",
+    ".final-cta-inner",
+    ".section-heading"
   ];
 
   const revealElements = document.querySelectorAll(
@@ -56,7 +82,13 @@ document.addEventListener("DOMContentLoaded", () => {
     element.classList.add("reveal");
 
     if (element.classList.contains("service-card")) {
-      element.style.transitionDelay = `${(index % 4) * 100}ms`;
+      element.style.transitionDelay =
+        `${(index % 4) * 120}ms`;
+    }
+
+    if (element.classList.contains("journey-step")) {
+      element.style.transitionDelay =
+        `${(index % 4) * 100}ms`;
     }
   });
 
@@ -72,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         threshold: 0.12,
-        rootMargin: "0px 0px -40px 0px"
+        rootMargin: "0px 0px -45px 0px"
       }
     );
 
@@ -86,40 +118,41 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // -------------------------------------------------------
-  // 3. CINEMATIC HERO IMAGE MOVEMENT
+  // 3. CINEMATIC HERO PARALLAX
   // -------------------------------------------------------
 
-  const hero = document.querySelector(".hero");
-  const heroImage = document.querySelector(".hero-image-main img");
+  const hero = document.querySelector(".hero-cinematic");
 
-  if (hero && heroImage) {
+  const heroImage = document.querySelector(
+    ".cinematic-background img"
+  );
+
+  if (hero && heroImage && !prefersReducedMotion) {
     let ticking = false;
 
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const rect = hero.getBoundingClientRect();
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
 
-            if (rect.bottom > 0 && rect.top < window.innerHeight) {
-              const progress = Math.max(
-                0,
-                Math.min(1, -rect.top / Math.max(rect.height, 1))
-              );
+      ticking = true;
 
-              heroImage.style.transform =
-                `scale(1.08) translateY(${progress * 35}px)`;
-            }
+      requestAnimationFrame(() => {
+        const rect = hero.getBoundingClientRect();
 
-            ticking = false;
-          });
+        if (rect.bottom > 0 && rect.top < window.innerHeight) {
+          const progress = Math.max(
+            0,
+            Math.min(1, -rect.top / rect.height)
+          );
 
-          ticking = true;
+          heroImage.style.setProperty(
+            "--parallax-y",
+            `${progress * 35}px`
+          );
         }
-      },
-      { passive: true }
-    );
+
+        ticking = false;
+      });
+    }, { passive: true });
   }
 
   // -------------------------------------------------------
@@ -130,23 +163,27 @@ document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelector(".nav-links");
 
   if (menuToggle && navLinks) {
+    const closeMenu = () => {
+      navLinks.classList.remove("open");
+      menuToggle.classList.remove("active");
+
+      menuToggle.setAttribute("aria-expanded", "false");
+      document.body.classList.remove("menu-open");
+    };
+
     menuToggle.setAttribute("aria-expanded", "false");
 
     menuToggle.addEventListener("click", () => {
-      const isOpen = navLinks.classList.toggle("active");
+      const isOpen = navLinks.classList.toggle("open");
 
       menuToggle.classList.toggle("active", isOpen);
       menuToggle.setAttribute("aria-expanded", String(isOpen));
+
       document.body.classList.toggle("menu-open", isOpen);
     });
 
     navLinks.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
-        navLinks.classList.remove("active");
-        menuToggle.classList.remove("active");
-        menuToggle.setAttribute("aria-expanded", "false");
-        document.body.classList.remove("menu-open");
-      });
+      link.addEventListener("click", closeMenu);
     });
 
     document.addEventListener("click", event => {
@@ -154,16 +191,19 @@ document.addEventListener("DOMContentLoaded", () => {
         !navLinks.contains(event.target) &&
         !menuToggle.contains(event.target)
       ) {
-        navLinks.classList.remove("active");
-        menuToggle.classList.remove("active");
-        menuToggle.setAttribute("aria-expanded", "false");
-        document.body.classList.remove("menu-open");
+        closeMenu();
+      }
+    });
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closeMenu();
       }
     });
   }
 
   // -------------------------------------------------------
-  // 5. MOOD SELECTOR
+  // 5. INTERACTIVE MOOD SELECTOR
   // -------------------------------------------------------
 
   const moodOptions = document.querySelectorAll(".mood-option");
@@ -196,9 +236,10 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   moodOptions.forEach(option => {
+    option.setAttribute("aria-pressed", "false");
+
     option.addEventListener("click", () => {
-      const mood = option.dataset.mood;
-      const response = moodMessages[mood];
+      const response = moodMessages[option.dataset.mood];
 
       if (!response) return;
 
@@ -210,21 +251,21 @@ document.addEventListener("DOMContentLoaded", () => {
       option.classList.add("selected");
       option.setAttribute("aria-pressed", "true");
 
-      if (moodResult) {
-        moodResult.classList.remove("show");
+      if (!moodResult) return;
 
-        setTimeout(() => {
-          moodResult.innerHTML = `
-            <h3>${response.title}</h3>
-            <p>${response.message}</p>
-          `;
+      moodResult.classList.remove("show");
 
-          moodResult.classList.add("show");
-        }, 180);
-      }
+      setTimeout(() => {
+        const heading = document.createElement("h3");
+        const paragraph = document.createElement("p");
+
+        heading.textContent = response.title;
+        paragraph.textContent = response.message;
+
+        moodResult.replaceChildren(heading, paragraph);
+        moodResult.classList.add("show");
+      }, 200);
     });
-
-    option.setAttribute("aria-pressed", "false");
   });
 
   // -------------------------------------------------------
@@ -235,7 +276,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (header) {
     const updateHeader = () => {
-      header.classList.toggle("scrolled", window.scrollY > 30);
+      header.classList.toggle(
+        "scrolled",
+        window.scrollY > 30
+      );
     };
 
     updateHeader();
@@ -246,7 +290,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // -------------------------------------------------------
-  // 7. SMOOTH SCROLLING
+  // 7. CINEMATIC SMOOTH SCROLL
   // -------------------------------------------------------
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -255,15 +299,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!targetId || targetId === "#") return;
 
-      const target = document.querySelector(targetId);
+      let target;
+
+      try {
+        target = document.querySelector(targetId);
+      } catch (error) {
+        return;
+      }
 
       if (target) {
         event.preventDefault();
 
         target.scrollIntoView({
-          behavior: window.matchMedia(
-            "(prefers-reduced-motion: reduce)"
-          ).matches ? "auto" : "smooth",
+          behavior: prefersReducedMotion ? "auto" : "smooth",
           block: "start"
         });
       }
@@ -271,21 +319,25 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // -------------------------------------------------------
-  // 8. IMAGE LOADING EFFECT
+  // 8. IMAGE LOADING
   // -------------------------------------------------------
 
   document.querySelectorAll("img").forEach(img => {
-    if (img.complete) {
+    const markLoaded = () => {
       img.classList.add("loaded");
+    };
+
+    if (img.complete && img.naturalWidth > 0) {
+      markLoaded();
     } else {
-      img.addEventListener("load", () => {
-        img.classList.add("loaded");
-      }, { once: true });
+      img.addEventListener("load", markLoaded, {
+        once: true
+      });
     }
   });
 
   // -------------------------------------------------------
-  // 9. FOOTER COPYRIGHT YEAR
+  // 9. FOOTER YEAR
   // -------------------------------------------------------
 
   const copyrightYear = document.querySelector("[data-year]");
