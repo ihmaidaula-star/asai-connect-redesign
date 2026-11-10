@@ -1875,3 +1875,220 @@ h2 em {
     flex-wrap: wrap;
   }
 }
+
+/* =========================================================
+   ASAI COMMUNITY — DARK CINEMATIC ENHANCEMENTS
+   Append below the existing stylesheet.
+   ========================================================= */
+
+:root {
+  --forest: #102f25;
+  --forest-dark: #081c16;
+  --green: #315b46;
+  --sage: #a8bba8;
+  --gold: #c9a875;
+  --cream: #f2f0e8;
+  --cream-dark: #e8e8dc;
+  --ink: #17231c;
+}
+
+/* Darker cinematic atmosphere */
+
+body {
+  background: #f2f0e8;
+}
+
+.announcement,
+.site-footer {
+  background: #061710;
+}
+
+.site-header {
+  background: rgba(242,240,232,.91);
+}
+
+/* Hero cinematic treatment */
+
+.hero-cinematic {
+  background: #071a13;
+}
+
+.cinematic-background img {
+  transform: translateY(var(--parallax-y, 0px)) scale(1.1);
+  filter: brightness(.75) saturate(.82);
+}
+
+.hero-shade {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(4,19,13,.88) 0%,
+      rgba(4,19,13,.63) 42%,
+      rgba(4,19,13,.18) 100%
+    ),
+    linear-gradient(
+      0deg,
+      rgba(4,19,13,.68),
+      transparent 65%
+    );
+}
+
+.hero-grain {
+  opacity: .22;
+}
+
+.title-highlight {
+  color: #c9a875;
+}
+
+/* Deeper green sections */
+
+.find-space {
+  background:
+    radial-gradient(
+      ellipse at 85% 20%,
+      rgba(76,113,83,.23),
+      transparent 45%
+    ),
+    #0b251b;
+}
+
+.final-cta {
+  background:
+    radial-gradient(
+      ellipse at 50% 100%,
+      rgba(91,132,94,.24),
+      transparent 55%
+    ),
+    #0b251b;
+}
+
+/* Darker announcement and footer details */
+
+.footer-column h4 {
+  color: #c9a875;
+}
+
+.footer-brand p,
+.footer-column a {
+  color: #aab9aa;
+}
+
+/* More dramatic image presentation */
+
+.intro-image,
+.community-image,
+.practitioner-image,
+.find-space-visual {
+  background: #102f25;
+}
+
+.intro-image img,
+.community-image img,
+.practitioner-image img,
+.find-space-visual img {
+  filter: saturate(.88);
+  transition:
+    transform 1.8s cubic-bezier(.22, 1, .36, 1),
+    filter 1.2s ease;
+}
+
+.intro-image:hover img,
+.community-image:hover img,
+.practitioner-image:hover img,
+.find-space-visual:hover img {
+  filter: saturate(1.05);
+}
+
+/* More cinematic service cards */
+
+.service-card {
+  border: 1px solid rgba(16,47,37,.06);
+}
+
+.service-card:hover {
+  box-shadow: 0 25px 65px rgba(8,28,22,.14);
+}
+
+/* Mood selector animation */
+
+.mood-result {
+  display: none;
+  opacity: 0;
+  transform: translateY(15px);
+  transition:
+    opacity .5s ease,
+    transform .5s cubic-bezier(.22, 1, .36, 1);
+}
+
+.mood-result.show {
+  display: block;
+  animation: moodReveal .6s cubic-bezier(.22, 1, .36, 1) forwards;
+}
+
+@keyframes moodReveal {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+    filter: blur(5px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+/* Better cinematic reveal */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(35px);
+  filter: blur(4px);
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+
+/* Mobile navigation compatibility */
+
+@media (max-width: 760px) {
+  .nav-links.open {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+  }
+
+  .hero-shade {
+    background:
+      linear-gradient(
+        90deg,
+        rgba(4,19,13,.75),
+        rgba(4,19,13,.32)
+      ),
+      linear-gradient(
+        0deg,
+        rgba(4,19,13,.78),
+        transparent 75%
+      );
+  }
+}
+
+/* Avoid forced animations for reduced-motion users */
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-background img {
+    animation: none;
+    transform: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
