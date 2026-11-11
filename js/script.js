@@ -1,7 +1,7 @@
 
 /* =========================================================
    ASAI COMMUNITY
-   CINEMATIC INTERACTION ENGINE
+   INTERACTION ENGINE
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -18,42 +18,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const loader = document.getElementById("cinematicLoader");
 
   if (loader) {
+    let hasVisited = false;
+
     try {
-      const hasVisited = sessionStorage.getItem("asaiVisited");
-
-      if (hasVisited || prefersReducedMotion) {
-        loader.classList.add("finished");
-      } else {
-        document.body.classList.add("loading");
-
-        const finishIntro = () => {
-          setTimeout(() => {
-            loader.classList.add("finished");
-            document.body.classList.remove("loading");
-
-            try {
-              sessionStorage.setItem("asaiVisited", "true");
-            } catch (error) {
-              // Session storage may be unavailable.
-            }
-          }, 1900);
-        };
-
-        if (document.readyState === "complete") {
-          finishIntro();
-        } else {
-          window.addEventListener("load", finishIntro, {
-            once: true
-          });
-        }
-      }
+      hasVisited = sessionStorage.getItem("asaiVisited") === "true";
     } catch (error) {
+      // Session storage may be unavailable.
+    }
+
+    const finishLoader = () => {
       loader.classList.add("finished");
+      document.body.classList.remove("loading");
+
+      try {
+        sessionStorage.setItem("asaiVisited", "true");
+      } catch (error) {
+        // Continue without session storage.
+      }
+    };
+
+    if (hasVisited || prefersReducedMotion) {
+      finishLoader();
+    } else {
+      document.body.classList.add("loading");
+
+      // Do not make the visitor wait for every external image.
+      window.setTimeout(finishLoader, 1900);
     }
   }
 
   // -------------------------------------------------------
-  // 2. CINEMATIC SCROLL REVEALS
+  // 2. SCROLL REVEALS
   // -------------------------------------------------------
 
   const revealSelectors = [
@@ -78,21 +73,23 @@ document.addEventListener("DOMContentLoaded", () => {
     revealSelectors.join(", ")
   );
 
-  revealElements.forEach((element, index) => {
-    element.classList.add("reveal");
+  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+    revealElements.forEach(element => {
+      element.classList.add("visible");
+    });
+  } else {
+    revealElements.forEach((element, index) => {
+      element.classList.add("reveal");
 
-    if (element.classList.contains("service-card")) {
-      element.style.transitionDelay =
-        `${(index % 4) * 120}ms`;
-    }
+      if (element.classList.contains("service-card")) {
+        element.style.transitionDelay = `${(index % 4) * 100}ms`;
+      }
 
-    if (element.classList.contains("journey-step")) {
-      element.style.transitionDelay =
-        `${(index % 4) * 100}ms`;
-    }
-  });
+      if (element.classList.contains("journey-step")) {
+        element.style.transitionDelay = `${(index % 4) * 80}ms`;
+      }
+    });
 
-  if ("IntersectionObserver" in window) {
     const revealObserver = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach(entry => {
@@ -104,55 +101,60 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       {
         threshold: 0.12,
-        rootMargin: "0px 0px -45px 0px"
+        rootMargin: "0px 0px -40px 0px"
       }
     );
 
     revealElements.forEach(element => {
       revealObserver.observe(element);
     });
-  } else {
-    revealElements.forEach(element => {
-      element.classList.add("visible");
-    });
   }
 
   // -------------------------------------------------------
-  // 3. CINEMATIC HERO PARALLAX
+  // 3. HERO PARALLAX
   // -------------------------------------------------------
 
   const hero = document.querySelector(".hero-cinematic");
-
   const heroImage = document.querySelector(
     ".cinematic-background img"
   );
 
-  if (hero && heroImage && !prefersReducedMotion) {
+  const supportsParallax =
+    !prefersReducedMotion &&
+    !window.matchMedia("(pointer: coarse)").matches &&
+    window.innerWidth > 768;
+
+  if (hero && heroImage && supportsParallax) {
     let ticking = false;
 
-    window.addEventListener("scroll", () => {
-      if (ticking) return;
+    const updateParallax = () => {
+      const rect = hero.getBoundingClientRect();
 
-      ticking = true;
+      if (rect.bottom > 0 && rect.top < window.innerHeight) {
+        const progress = Math.max(
+          0,
+          Math.min(1, -rect.top / rect.height)
+        );
 
-      requestAnimationFrame(() => {
-        const rect = hero.getBoundingClientRect();
+        heroImage.style.setProperty(
+          "--parallax-y",
+          `${progress * 30}px`
+        );
+      }
 
-        if (rect.bottom > 0 && rect.top < window.innerHeight) {
-          const progress = Math.max(
-            0,
-            Math.min(1, -rect.top / rect.height)
-          );
+      ticking = false;
+    };
 
-          heroImage.style.setProperty(
-            "--parallax-y",
-            `${progress * 35}px`
-          );
-        }
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
 
-        ticking = false;
-      });
-    }, { passive: true });
+        ticking = true;
+        window.requestAnimationFrame(updateParallax);
+      },
+      { passive: true }
+    );
   }
 
   // -------------------------------------------------------
@@ -163,27 +165,51 @@ document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelector(".nav-links");
 
   if (menuToggle && navLinks) {
-    const closeMenu = () => {
+    const closeMenu = (returnFocus = false) => {
       navLinks.classList.remove("open");
       menuToggle.classList.remove("active");
 
       menuToggle.setAttribute("aria-expanded", "false");
+      menuToggle.setAttribute("aria-label", "Open navigation");
+
       document.body.classList.remove("menu-open");
+
+      if (returnFocus) {
+        menuToggle.focus();
+      }
     };
 
-    menuToggle.setAttribute("aria-expanded", "false");
+    const openMenu = () => {
+      navLinks.classList.add("open");
+      menuToggle.classList.add("active");
+
+      menuToggle.setAttribute("aria-expanded", "true");
+      menuToggle.setAttribute("aria-label", "Close navigation");
+
+      document.body.classList.add("menu-open");
+
+      const firstLink = navLinks.querySelector("a");
+
+      if (firstLink) {
+        firstLink.focus();
+      }
+    };
 
     menuToggle.addEventListener("click", () => {
-      const isOpen = navLinks.classList.toggle("open");
+      const isOpen =
+        menuToggle.getAttribute("aria-expanded") === "true";
 
-      menuToggle.classList.toggle("active", isOpen);
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-
-      document.body.classList.toggle("menu-open", isOpen);
+      if (isOpen) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
     });
 
     navLinks.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", closeMenu);
+      link.addEventListener("click", () => {
+        closeMenu();
+      });
     });
 
     document.addEventListener("click", event => {
@@ -196,7 +222,17 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
+      if (
+        event.key === "Escape" &&
+        menuToggle.getAttribute("aria-expanded") === "true"
+      ) {
+        closeMenu(true);
+      }
+    });
+
+    // Prevent the mobile menu remaining open after resizing.
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 900) {
         closeMenu();
       }
     });
@@ -231,13 +267,13 @@ document.addEventListener("DOMContentLoaded", () => {
     ready: {
       title: "Your next chapter can start here.",
       message:
-        "Take that first step. We're here to help you find the support and community you're looking for."
+        "Take that first step. Explore the support and community that may help you move forward."
     }
   };
 
-  moodOptions.forEach(option => {
-    option.setAttribute("aria-pressed", "false");
+  let moodUpdateTimer;
 
+  moodOptions.forEach(option => {
     option.addEventListener("click", () => {
       const response = moodMessages[option.dataset.mood];
 
@@ -253,9 +289,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (!moodResult) return;
 
+      window.clearTimeout(moodUpdateTimer);
+
       moodResult.classList.remove("show");
 
-      setTimeout(() => {
+      moodUpdateTimer = window.setTimeout(() => {
         const heading = document.createElement("h3");
         const paragraph = document.createElement("p");
 
@@ -263,8 +301,11 @@ document.addEventListener("DOMContentLoaded", () => {
         paragraph.textContent = response.message;
 
         moodResult.replaceChildren(heading, paragraph);
+
+        // Important: remove hidden so the result can appear.
+        moodResult.hidden = false;
         moodResult.classList.add("show");
-      }, 200);
+      }, prefersReducedMotion ? 0 : 180);
     });
   });
 
@@ -290,7 +331,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // -------------------------------------------------------
-  // 7. CINEMATIC SMOOTH SCROLL
+  // 7. SMOOTH INTERNAL NAVIGATION
   // -------------------------------------------------------
 
   document.querySelectorAll('a[href^="#"]').forEach(link => {
@@ -307,14 +348,14 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      if (target) {
-        event.preventDefault();
+      if (!target) return;
 
-        target.scrollIntoView({
-          behavior: prefersReducedMotion ? "auto" : "smooth",
-          block: "start"
-        });
-      }
+      event.preventDefault();
+
+      target.scrollIntoView({
+        behavior: prefersReducedMotion ? "auto" : "smooth",
+        block: "start"
+      });
     });
   });
 
@@ -327,17 +368,24 @@ document.addEventListener("DOMContentLoaded", () => {
       img.classList.add("loaded");
     };
 
-    if (img.complete && img.naturalWidth > 0) {
-      markLoaded();
+    const markFailed = () => {
+      img.classList.add("image-failed");
+    };
+
+    if (img.complete) {
+      if (img.naturalWidth > 0) {
+        markLoaded();
+      } else {
+        markFailed();
+      }
     } else {
-      img.addEventListener("load", markLoaded, {
-        once: true
-      });
+      img.addEventListener("load", markLoaded, { once: true });
+      img.addEventListener("error", markFailed, { once: true });
     }
   });
 
   // -------------------------------------------------------
-  // 9. FOOTER YEAR
+  // 9. AUTOMATIC FOOTER YEAR
   // -------------------------------------------------------
 
   const copyrightYear = document.querySelector("[data-year]");
