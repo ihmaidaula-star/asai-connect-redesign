@@ -12,23 +12,40 @@ document.addEventListener("DOMContentLoaded", () => {
   ).matches;
 
   // -------------------------------------------------------
-  // 1. CINEMATIC INTRO
+  // 1. CINEMATIC VIDEO INTRO
   // -------------------------------------------------------
 
   const loader = document.getElementById("cinematicLoader");
+  const loaderVideo = loader?.querySelector(".loader-video");
+  const skipButton = document.getElementById("loaderSkip");
 
   if (loader) {
     let hasVisited = false;
+    let loaderFinished = false;
+    let fallbackTimer;
+    let maximumTimer;
 
     try {
-      hasVisited = sessionStorage.getItem("asaiVisited") === "true";
+      hasVisited =
+        sessionStorage.getItem("asaiVisited") === "true";
     } catch (error) {
-      // Session storage may be unavailable.
+      // Continue without session storage.
     }
 
     const finishLoader = () => {
-      loader.classList.add("finished");
+      if (loaderFinished) return;
+
+      loaderFinished = true;
+
+      window.clearTimeout(fallbackTimer);
+      window.clearTimeout(maximumTimer);
+
+      loader.classList.add("is-hidden");
       document.body.classList.remove("loading");
+
+      if (loaderVideo) {
+        loaderVideo.pause();
+      }
 
       try {
         sessionStorage.setItem("asaiVisited", "true");
@@ -42,8 +59,84 @@ document.addEventListener("DOMContentLoaded", () => {
     } else {
       document.body.classList.add("loading");
 
-      // Do not make the visitor wait for every external image.
-      window.setTimeout(finishLoader, 1900);
+      // Hard limit: never trap a visitor behind the intro.
+      maximumTimer = window.setTimeout(
+        finishLoader,
+        5500
+      );
+
+      if (loaderVideo) {
+        loaderVideo.addEventListener(
+          "ended",
+          finishLoader,
+          { once: true }
+        );
+
+        loaderVideo.addEventListener(
+          "error",
+          () => {
+            fallbackTimer = window.setTimeout(
+              finishLoader,
+              1200
+            );
+          },
+          { once: true }
+        );
+
+        // If autoplay fails, show the intro briefly,
+        // then reveal the homepage.
+        const playPromise = loaderVideo.play();
+
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            fallbackTimer = window.setTimeout(
+              finishLoader,
+              1600
+            );
+          });
+        }
+
+        // A five-second intro should not hold the visitor
+        // indefinitely if the video has no ended event.
+        if (
+          loaderVideo.readyState >= 1 &&
+          Number.isFinite(loaderVideo.duration) &&
+          loaderVideo.duration > 0
+        ) {
+          maximumTimer = window.setTimeout(
+            finishLoader,
+            Math.min(loaderVideo.duration * 1000, 5000) + 500
+          );
+        } else {
+          loaderVideo.addEventListener(
+            "loadedmetadata",
+            () => {
+              if (
+                Number.isFinite(loaderVideo.duration) &&
+                loaderVideo.duration > 0
+              ) {
+                window.clearTimeout(maximumTimer);
+
+                maximumTimer = window.setTimeout(
+                  finishLoader,
+                  Math.min(loaderVideo.duration * 1000, 5000) + 500
+                );
+              }
+            },
+            { once: true }
+          );
+        }
+      } else {
+        // Static fallback if the video element is missing.
+        fallbackTimer = window.setTimeout(
+          finishLoader,
+          1800
+        );
+      }
+    }
+
+    if (skipButton) {
+      skipButton.addEventListener("click", finishLoader);
     }
   }
 
@@ -73,7 +166,10 @@ document.addEventListener("DOMContentLoaded", () => {
     revealSelectors.join(", ")
   );
 
-  if (prefersReducedMotion || !("IntersectionObserver" in window)) {
+  if (
+    prefersReducedMotion ||
+    !("IntersectionObserver" in window)
+  ) {
     revealElements.forEach(element => {
       element.classList.add("visible");
     });
@@ -82,11 +178,13 @@ document.addEventListener("DOMContentLoaded", () => {
       element.classList.add("reveal");
 
       if (element.classList.contains("service-card")) {
-        element.style.transitionDelay = `${(index % 4) * 100}ms`;
+        element.style.transitionDelay =
+          `${(index % 4) * 100}ms`;
       }
 
       if (element.classList.contains("journey-step")) {
-        element.style.transitionDelay = `${(index % 4) * 80}ms`;
+        element.style.transitionDelay =
+          `${(index % 4) * 80}ms`;
       }
     });
 
@@ -115,6 +213,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // -------------------------------------------------------
 
   const hero = document.querySelector(".hero-cinematic");
+
   const heroImage = document.querySelector(
     ".cinematic-background img"
   );
@@ -130,7 +229,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const updateParallax = () => {
       const rect = hero.getBoundingClientRect();
 
-      if (rect.bottom > 0 && rect.top < window.innerHeight) {
+      if (
+        rect.bottom > 0 &&
+        rect.top < window.innerHeight
+      ) {
         const progress = Math.max(
           0,
           Math.min(1, -rect.top / rect.height)
@@ -170,7 +272,10 @@ document.addEventListener("DOMContentLoaded", () => {
       menuToggle.classList.remove("active");
 
       menuToggle.setAttribute("aria-expanded", "false");
-      menuToggle.setAttribute("aria-label", "Open navigation");
+      menuToggle.setAttribute(
+        "aria-label",
+        "Open navigation"
+      );
 
       document.body.classList.remove("menu-open");
 
@@ -184,7 +289,10 @@ document.addEventListener("DOMContentLoaded", () => {
       menuToggle.classList.add("active");
 
       menuToggle.setAttribute("aria-expanded", "true");
-      menuToggle.setAttribute("aria-label", "Close navigation");
+      menuToggle.setAttribute(
+        "aria-label",
+        "Close navigation"
+      );
 
       document.body.classList.add("menu-open");
 
@@ -207,9 +315,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     navLinks.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", () => {
-        closeMenu();
-      });
+      link.addEventListener("click", closeMenu);
     });
 
     document.addEventListener("click", event => {
@@ -230,7 +336,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Prevent the mobile menu remaining open after resizing.
     window.addEventListener("resize", () => {
       if (window.innerWidth > 900) {
         closeMenu();
@@ -242,8 +347,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // 5. INTERACTIVE MOOD SELECTOR
   // -------------------------------------------------------
 
-  const moodOptions = document.querySelectorAll(".mood-option");
-  const moodResult = document.querySelector(".mood-result");
+  const moodOptions = document.querySelectorAll(
+    ".mood-option"
+  );
+
+  const moodResult = document.querySelector(
+    ".mood-result"
+  );
 
   const moodMessages = {
     heavy: {
@@ -302,7 +412,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         moodResult.replaceChildren(heading, paragraph);
 
-        // Important: remove hidden so the result can appear.
         moodResult.hidden = false;
         moodResult.classList.add("show");
       }, prefersReducedMotion ? 0 : 180);
@@ -379,8 +488,13 @@ document.addEventListener("DOMContentLoaded", () => {
         markFailed();
       }
     } else {
-      img.addEventListener("load", markLoaded, { once: true });
-      img.addEventListener("error", markFailed, { once: true });
+      img.addEventListener("load", markLoaded, {
+        once: true
+      });
+
+      img.addEventListener("error", markFailed, {
+        once: true
+      });
     }
   });
 
@@ -388,10 +502,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // 9. AUTOMATIC FOOTER YEAR
   // -------------------------------------------------------
 
-  const copyrightYear = document.querySelector("[data-year]");
+  const copyrightYear = document.querySelector(
+    "[data-year]"
+  );
 
   if (copyrightYear) {
-    copyrightYear.textContent = new Date().getFullYear();
+    copyrightYear.textContent =
+      new Date().getFullYear();
   }
 
 });
