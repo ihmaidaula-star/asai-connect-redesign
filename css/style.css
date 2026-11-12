@@ -117,74 +117,244 @@ img {
    03. CINEMATIC LOADING SCREEN
    ============================================================ */
 
+
+/* ============================================================
+   03. CINEMATIC VIDEO INTRO
+   ============================================================ */
+
 .cinematic-loader {
   position: fixed;
   inset: 0;
   z-index: 10000;
 
-  display: grid;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
 
   background: var(--forest-dark);
   color: var(--white);
 
-  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+
+  clip-path: inset(0);
 
   transition:
-    clip-path 1.5s cubic-bezier(.77, 0, .18, 1),
-    visibility 1.5s;
+    opacity 1s ease,
+    clip-path 1.2s cubic-bezier(.77, 0, .18, 1),
+    visibility 1s ease;
 }
 
-.cinematic-loader.finished {
-  clip-path: inset(0 0 100% 0);
+/* Loader exit transition */
+
+.cinematic-loader.is-hidden {
+  opacity: 0;
   visibility: hidden;
   pointer-events: none;
+  clip-path: inset(0 0 100% 0);
 }
 
+/* Background video */
+
+.loader-video {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: center;
+
+  background: var(--forest-dark);
+}
+
+/* Cinematic dark overlay */
+
+.loader-overlay {
+  position: absolute;
+  inset: 0;
+
+  background:
+    linear-gradient(
+      180deg,
+      rgba(5, 20, 14, .25),
+      rgba(5, 20, 14, .55)
+    ),
+    linear-gradient(
+      90deg,
+      rgba(5, 20, 14, .25),
+      transparent 75%
+    );
+}
+
+/* Logo and introduction */
+
 .loader-content {
+  position: relative;
+  z-index: 2;
+
   width: min(340px, 80%);
+
   text-align: center;
-  animation: loaderAppear 1.2s var(--ease) both;
+  color: #fff9e9;
+
+  animation: loaderReveal 1.2s var(--ease) both;
 }
 
 .loader-symbol {
   font-family: var(--serif);
-  font-size: 100px;
+  font-size: clamp(5rem, 12vw, 9rem);
   line-height: 1;
-  color: var(--cream);
-  letter-spacing: -8px;
+
+  color: #e4c58b;
+  letter-spacing: -.08em;
 }
 
 .loader-name {
-  margin-top: 20px;
-  font-size: 10px;
-  letter-spacing: 6px;
+  margin-top: 18px;
+
+  font-family: var(--sans);
+  font-size: clamp(.8rem, 2vw, 1.05rem);
+  font-weight: 600;
+  letter-spacing: .35em;
 }
 
+/* Loading progress */
+
 .loader-line {
-  width: 100%;
+  width: 130px;
   height: 1px;
-  margin-top: 35px;
+
+  margin: 25px auto 18px;
   overflow: hidden;
-  background: rgba(255,255,255,.18);
+
+  background: rgba(255,255,255,.3);
 }
 
 .loader-line span {
   display: block;
   width: 100%;
   height: 100%;
+
   background: var(--gold);
+
   transform: scaleX(0);
   transform-origin: left;
-  animation: loadingLine 1.8s var(--ease) forwards;
+
+  animation: loaderProgress 5s linear forwards;
 }
 
 .loader-content p {
-  margin-top: 17px;
-  color: #bdc8bd;
-  font-size: 8px;
-  letter-spacing: 4px;
+  margin: 0;
+
+  color: rgba(255,249,233,.85);
+
+  font-size: .65rem;
+  letter-spacing: .28em;
 }
+
+/* Skip intro button */
+
+.loader-skip {
+  position: absolute;
+  z-index: 3;
+
+  right: 28px;
+  bottom: 28px;
+
+  padding: 11px 16px;
+
+  border: 1px solid rgba(255,255,255,.45);
+  border-radius: 30px;
+
+  background: rgba(16,47,37,.45);
+  color: white;
+
+  font: inherit;
+  font-size: 12px;
+
+  cursor: pointer;
+
+  backdrop-filter: blur(8px);
+
+  transition:
+    background .3s ease,
+    border-color .3s ease,
+    transform .3s ease;
+}
+
+.loader-skip:hover {
+  background: rgba(16,47,37,.85);
+  border-color: var(--gold);
+  transform: translateY(-2px);
+}
+
+.loader-skip span {
+  margin-left: 8px;
+  color: var(--gold);
+}
+
+/* Intro animations */
+
+@keyframes loaderReveal {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+    filter: blur(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes loaderProgress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .loader-video {
+    object-position: center;
+  }
+
+  .loader-content {
+    width: 85%;
+  }
+
+  .loader-name {
+    letter-spacing: .25em;
+  }
+
+  .loader-skip {
+    right: 18px;
+    bottom: 18px;
+  }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+  .loader-content,
+  .loader-line span {
+    animation: none;
+  }
+
+  .cinematic-loader {
+    transition: none;
+  }
+}
+
+  
 
 
 /* ============================================================
