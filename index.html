@@ -56,15 +56,38 @@
 
 <body>
 
-  <!-- CINEMATIC INTRO -->
-  <div class="cinematic-loader" id="cinematicLoader" aria-label="Asai Community introduction">
-    <div class="loader-content">
-      <div class="loader-symbol">a.</div>
-      <div class="loader-name">ASAI COMMUNITY</div>
-      <div class="loader-line"><span></span></div>
-      <p>A SPACE TO BELONG</p>
-    </div>
+  
+<!-- CINEMATIC VIDEO INTRO -->
+<div class="cinematic-loader" id="cinematicLoader" aria-label="Asai Community introduction">
+
+  <video
+    class="loader-video"
+    id="loaderVideo"
+    autoplay
+    muted
+    playsinline
+    preload="metadata"
+    poster="assets/images/asai-intro-poster.jpg"
+    aria-hidden="true"
+  >
+    <source src="assets/videos/asai-intro.mp4" type="video/mp4">
+  </video>
+
+  <div class="loader-overlay"></div>
+
+  <div class="loader-content">
+    <div class="loader-symbol">a.</div>
+    <div class="loader-name">ASAI COMMUNITY</div>
+    <div class="loader-line"><span></span></div>
+    <p>A SPACE TO BELONG</p>
   </div>
+
+  <button class="loader-skip" id="skipIntro" type="button">
+    Skip intro <span>↗</span>
+  </button>
+
+</div>
+
 
   <!-- ANNOUNCEMENT -->
   <div class="announcement">
