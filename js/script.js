@@ -11,34 +11,22 @@ document.addEventListener("DOMContentLoaded", () => {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
+
   // -------------------------------------------------------
   // 1. CINEMATIC VIDEO INTRO
   // -------------------------------------------------------
 
   const loader = document.getElementById("cinematicLoader");
-  const loaderVideo = loader?.querySelector(".loader-video");
+  const loaderVideo = document.getElementById("loaderVideo");
   const skipButton = document.getElementById("loaderSkip");
 
   if (loader) {
-    let hasVisited = false;
     let loaderFinished = false;
-    let fallbackTimer;
-    let maximumTimer;
-
-    try {
-      hasVisited =
-        sessionStorage.getItem("asaiVisited") === "true";
-    } catch (error) {
-      // Continue without session storage.
-    }
 
     const finishLoader = () => {
       if (loaderFinished) return;
 
       loaderFinished = true;
-
-      window.clearTimeout(fallbackTimer);
-      window.clearTimeout(maximumTimer);
 
       loader.classList.add("is-hidden");
       document.body.classList.remove("loading");
@@ -46,99 +34,58 @@ document.addEventListener("DOMContentLoaded", () => {
       if (loaderVideo) {
         loaderVideo.pause();
       }
-
-      try {
-        sessionStorage.setItem("asaiVisited", "true");
-      } catch (error) {
-        // Continue without session storage.
-      }
     };
 
-    if (hasVisited || prefersReducedMotion) {
+    // Respect accessibility preferences.
+    if (prefersReducedMotion) {
       finishLoader();
     } else {
       document.body.classList.add("loading");
 
-      // Hard limit: never trap a visitor behind the intro.
-      maximumTimer = window.setTimeout(
-        finishLoader,
-        5500
-      );
-
       if (loaderVideo) {
+
+        // Reveal the homepage only when the video finishes.
         loaderVideo.addEventListener(
           "ended",
           finishLoader,
           { once: true }
         );
 
+        // If the video cannot load, use a short fallback.
         loaderVideo.addEventListener(
           "error",
           () => {
-            fallbackTimer = window.setTimeout(
-              finishLoader,
-              1200
-            );
+            window.setTimeout(finishLoader, 4000);
           },
           { once: true }
         );
 
-        // If autoplay fails, show the intro briefly,
-        // then reveal the homepage.
+        // Attempt playback.
         const playPromise = loaderVideo.play();
 
+        // If autoplay is blocked, keep the poster visible.
+        // The visitor can still use Skip intro.
         if (playPromise !== undefined) {
-          playPromise.catch(() => {
-            fallbackTimer = window.setTimeout(
-              finishLoader,
-              1600
+          playPromise.catch(error => {
+            console.warn(
+              "ASAI intro autoplay was blocked:",
+              error
             );
           });
         }
 
-        // A five-second intro should not hold the visitor
-        // indefinitely if the video has no ended event.
-        if (
-          loaderVideo.readyState >= 1 &&
-          Number.isFinite(loaderVideo.duration) &&
-          loaderVideo.duration > 0
-        ) {
-          maximumTimer = window.setTimeout(
-            finishLoader,
-            Math.min(loaderVideo.duration * 1000, 5000) + 500
-          );
-        } else {
-          loaderVideo.addEventListener(
-            "loadedmetadata",
-            () => {
-              if (
-                Number.isFinite(loaderVideo.duration) &&
-                loaderVideo.duration > 0
-              ) {
-                window.clearTimeout(maximumTimer);
-
-                maximumTimer = window.setTimeout(
-                  finishLoader,
-                  Math.min(loaderVideo.duration * 1000, 5000) + 500
-                );
-              }
-            },
-            { once: true }
-          );
-        }
       } else {
-        // Static fallback if the video element is missing.
-        fallbackTimer = window.setTimeout(
-          finishLoader,
-          1800
-        );
+        // No video element: show a short static introduction.
+        window.setTimeout(finishLoader, 4000);
       }
     }
 
+    // Only a deliberate click skips the introduction.
     if (skipButton) {
       skipButton.addEventListener("click", finishLoader);
     }
   }
+
 
   // -------------------------------------------------------
   // 2. SCROLL REVEALS
