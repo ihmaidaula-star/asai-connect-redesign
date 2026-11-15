@@ -299,8 +299,15 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   const moodResult = document.querySelector(
-    ".mood-result"
-  );
+  ".mood-result"
+);
+
+// Accessibility: announce mood responses to screen readers.
+if (moodResult) {
+  moodResult.setAttribute("role", "status");
+  moodResult.setAttribute("aria-live", "polite");
+  moodResult.setAttribute("aria-atomic", "true");
+}
 
   const moodMessages = {
     heavy: {
