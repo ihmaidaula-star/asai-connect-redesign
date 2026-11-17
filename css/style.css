@@ -2620,3 +2620,124 @@ h2 em {
 .service-card .service-link {
   margin-top: auto;
 }
+
+/* ============================================================
+   ASAI — FINAL CSS CORRECTIONS
+   ============================================================ */
+
+/* 1. SERVICE CARDS — SUPPORT LONGER CONTENT */
+
+.service-card {
+  min-height: 100%;
+  height: auto;
+}
+
+.service-card h4 {
+  color: var(--forest);
+}
+
+.service-card ul {
+  margin-top: 4px;
+}
+
+.service-card li {
+  color: #505d52;
+}
+
+.service-card .service-link {
+  margin-top: auto;
+}
+
+/* 2. MOOD DISCLAIMER — IMPROVE CONTRAST */
+
+.find-space .mood-disclaimer {
+  color: #c0cbbf;
+  opacity: .9;
+}
+
+/* 3. MOOD RESULT — CORRECT VISIBILITY */
+
+.mood-result[hidden] {
+  display: none !important;
+}
+
+.mood-result.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* 4. SELECTED MOOD — CLEARER FEEDBACK */
+
+.mood-option.selected {
+  padding-left: 12px;
+  background: rgba(255, 255, 255, .09);
+}
+
+.mood-option.selected .mood-symbol {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: var(--forest-dark);
+}
+
+/* 5. DEMO DISCLOSURE — IF INCLUDED IN THE HTML */
+
+.demo-notice {
+  padding: 11px 20px;
+  background: #e8e8dc;
+  color: #46564a;
+  text-align: center;
+  font-size: 10px;
+  line-height: 1.7;
+  letter-spacing: .3px;
+}
+
+.demo-notice a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* 6. SERVICE CARD RESPONSIVENESS */
+
+@media (max-width: 1050px) {
+  .service-card {
+    min-height: 100%;
+  }
+}
+
+@media (max-width: 760px) {
+  .service-card {
+    padding: 27px 22px;
+  }
+
+  .service-card h3 {
+    font-size: 34px;
+  }
+
+  .service-card h4 {
+    margin-top: 22px;
+  }
+
+  .service-card li {
+    padding: 11px 0 11px 18px;
+    font-size: 12px;
+  }
+
+  .mood-disclaimer {
+    font-size: 10px;
+  }
+}
+
+/* 7. REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-background img {
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .loader-content,
+  .loader-line span {
+    animation: none !important;
+  }
+}
