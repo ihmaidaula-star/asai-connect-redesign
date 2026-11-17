@@ -1,7 +1,7 @@
 
 /* =========================================================
    ASAI COMMUNITY
-   INTERACTION ENGINE
+   INTERACTION ENGINE — REVISED
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,7 +10,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const prefersReducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
-
 
   // -------------------------------------------------------
   // 1. CINEMATIC VIDEO INTRO
@@ -22,11 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   if (loader) {
     let loaderFinished = false;
+    let loaderFallback;
 
     const finishLoader = () => {
       if (loaderFinished) return;
 
       loaderFinished = true;
+
+      window.clearTimeout(loaderFallback);
 
       loader.classList.add("is-hidden");
       document.body.classList.remove("loading");
@@ -36,35 +38,32 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-    // Respect accessibility preferences.
     if (prefersReducedMotion) {
       finishLoader();
     } else {
       document.body.classList.add("loading");
 
-      if (loaderVideo) {
+      // Never leave visitors trapped on the intro.
+      loaderFallback = window.setTimeout(
+        finishLoader,
+        12000
+      );
 
-        // Reveal the homepage only when the video finishes.
+      if (loaderVideo) {
         loaderVideo.addEventListener(
           "ended",
           finishLoader,
           { once: true }
         );
 
-        // If the video cannot load, use a short fallback.
         loaderVideo.addEventListener(
           "error",
-          () => {
-            window.setTimeout(finishLoader, 4000);
-          },
+          finishLoader,
           { once: true }
         );
 
-        // Attempt playback.
         const playPromise = loaderVideo.play();
 
-        // If autoplay is blocked, keep the poster visible.
-        // The visitor can still use Skip intro.
         if (playPromise !== undefined) {
           playPromise.catch(error => {
             console.warn(
@@ -73,19 +72,15 @@ document.addEventListener("DOMContentLoaded", () => {
             );
           });
         }
-
       } else {
-        // No video element: show a short static introduction.
-        window.setTimeout(finishLoader, 4000);
+        window.setTimeout(finishLoader, 1500);
       }
     }
 
-    // Only a deliberate click skips the introduction.
     if (skipButton) {
       skipButton.addEventListener("click", finishLoader);
     }
   }
-
 
   // -------------------------------------------------------
   // 2. SCROLL REVEALS
@@ -197,13 +192,15 @@ document.addEventListener("DOMContentLoaded", () => {
     window.addEventListener(
       "scroll",
       () => {
-        if (ticking) return;
-
-        ticking = true;
-        window.requestAnimationFrame(updateParallax);
+        if (!ticking) {
+          ticking = true;
+          window.requestAnimationFrame(updateParallax);
+        }
       },
       { passive: true }
     );
+
+    updateParallax();
   }
 
   // -------------------------------------------------------
@@ -242,13 +239,14 @@ document.addEventListener("DOMContentLoaded", () => {
       );
 
       document.body.classList.add("menu-open");
-
-      const firstLink = navLinks.querySelector("a");
-
-      if (firstLink) {
-        firstLink.focus();
-      }
     };
+
+    // Establish the correct initial accessibility state.
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute(
+      "aria-label",
+      "Open navigation"
+    );
 
     menuToggle.addEventListener("click", () => {
       const isOpen =
@@ -262,7 +260,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     navLinks.querySelectorAll("a").forEach(link => {
-      link.addEventListener("click", closeMenu);
+      link.addEventListener("click", () => closeMenu());
     });
 
     document.addEventListener("click", event => {
@@ -283,8 +281,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    // Match the actual mobile navigation breakpoint.
     window.addEventListener("resize", () => {
-      if (window.innerWidth > 900) {
+      if (window.innerWidth > 760) {
         closeMenu();
       }
     });
@@ -299,15 +298,14 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   const moodResult = document.querySelector(
-  ".mood-result"
-);
+    ".mood-result"
+  );
 
-// Accessibility: announce mood responses to screen readers.
-if (moodResult) {
-  moodResult.setAttribute("role", "status");
-  moodResult.setAttribute("aria-live", "polite");
-  moodResult.setAttribute("aria-atomic", "true");
-}
+  if (moodResult) {
+    moodResult.setAttribute("role", "status");
+    moodResult.setAttribute("aria-live", "polite");
+    moodResult.setAttribute("aria-atomic", "true");
+  }
 
   const moodMessages = {
     heavy: {
@@ -335,9 +333,9 @@ if (moodResult) {
     }
   };
 
-  let moodUpdateTimer;
-
   moodOptions.forEach(option => {
+    option.setAttribute("aria-pressed", "false");
+
     option.addEventListener("click", () => {
       const response = moodMessages[option.dataset.mood];
 
@@ -353,22 +351,16 @@ if (moodResult) {
 
       if (!moodResult) return;
 
-      window.clearTimeout(moodUpdateTimer);
+      const heading = document.createElement("h3");
+      const paragraph = document.createElement("p");
 
-      moodResult.classList.remove("show");
+      heading.textContent = response.title;
+      paragraph.textContent = response.message;
 
-      moodUpdateTimer = window.setTimeout(() => {
-        const heading = document.createElement("h3");
-        const paragraph = document.createElement("p");
+      moodResult.replaceChildren(heading, paragraph);
 
-        heading.textContent = response.title;
-        paragraph.textContent = response.message;
-
-        moodResult.replaceChildren(heading, paragraph);
-
-        moodResult.hidden = false;
-        moodResult.classList.add("show");
-      }, prefersReducedMotion ? 0 : 180);
+      moodResult.hidden = false;
+      moodResult.classList.add("show");
     });
   });
 
