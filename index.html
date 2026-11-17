@@ -28,7 +28,7 @@
   >
   <meta
     property="og:image:alt"
-    content="Asai Community redesign concept"
+    content="Asai Community independent redesign concept"
   >
 
   <meta name="twitter:card" content="summary_large_image">
@@ -57,7 +57,7 @@
   <script src="js/script.js" defer></script>
 </head>
 
-<body>
+<body class="loading">
 
   <!-- ACCESSIBILITY: SKIP NAVIGATION -->
   <a class="skip-link" href="#main-content">Skip to content</a>
@@ -103,6 +103,7 @@
       class="loader-skip"
       id="loaderSkip"
       type="button"
+      aria-label="Skip website introduction"
     >
       Skip intro <span aria-hidden="true">↗</span>
     </button>
@@ -221,7 +222,7 @@
     </section>
 
     <!-- OUR STORY -->
-    <section class="intro section-padding" id="about">
+    <section class="intro section-padding" id="about" aria-labelledby="about-title">
 
       <div class="container intro-grid">
 
@@ -232,7 +233,7 @@
 
         <div class="intro-content">
 
-          <h2>
+          <h2 id="about-title">
             Wellness, reimagined
             <span>for Africa.</span>
           </h2>
@@ -276,7 +277,7 @@
     </section>
 
     <!-- FOUR ASAI DIMENSIONS -->
-    <section class="services section-padding" id="services">
+    <section class="services section-padding" id="services" aria-labelledby="services-title">
 
       <div class="container">
 
@@ -284,13 +285,14 @@
 
           <div>
             <span class="eyebrow">02 / EXPLORE ASAI</span>
-            <h2>Four dimensions.<br><em>One home.</em></h2>
+            <h2 id="services-title">Four dimensions.<br><em>One home.</em></h2>
           </div>
 
           <p>
             Wellbeing is more than one thing. Explore four connected
-            spaces designed to support different parts of your life,
-            from professional care to community, reflection and growth.
+            spaces representing different parts of life, from
+            professional care to community, reflection and growth.
+            Visit the original platform to confirm current services.
           </p>
 
         </div>
@@ -316,7 +318,7 @@
               your experiences, identity, culture and personal needs.
             </p>
 
-            <h4>Explore professional care</h4>
+            <h4>Areas to explore</h4>
 
             <ul>
               <li>Individual therapy and counselling</li>
@@ -333,7 +335,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              Explore all dimensions
+              Explore original services
               <span aria-hidden="true">↗</span>
             </a>
 
@@ -359,7 +361,7 @@
               experiences and mutual understanding.
             </p>
 
-            <h4>Find your community</h4>
+            <h4>Areas to explore</h4>
 
             <ul>
               <li>Yoga and movement circles</li>
@@ -376,7 +378,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              Explore all dimensions
+              Explore original services
               <span aria-hidden="true">↗</span>
             </a>
 
@@ -401,7 +403,7 @@
               and a deeper relationship with your inner world.
             </p>
 
-            <h4>Reconnect with yourself</h4>
+            <h4>Areas to explore</h4>
 
             <ul>
               <li>Guided personal reflections</li>
@@ -418,7 +420,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              Explore the journal
+              Explore the original journal
               <span aria-hidden="true">↗</span>
             </a>
 
@@ -443,7 +445,7 @@
               for individuals, teams and institutions to flourish.
             </p>
 
-            <h4>Build room for growth</h4>
+            <h4>Areas to explore</h4>
 
             <ul>
               <li>Student wellbeing programmes</li>
@@ -460,7 +462,7 @@
               target="_blank"
               rel="noopener noreferrer"
             >
-              Explore all dimensions
+              Explore original services
               <span aria-hidden="true">↗</span>
             </a>
 
@@ -484,7 +486,7 @@
     </section>
 
     <!-- FIND YOUR SPACE -->
-    <section class="find-space section-padding" id="find-space">
+    <section class="find-space section-padding" id="find-space" aria-labelledby="find-space-title">
 
       <div class="container find-space-grid">
 
@@ -492,7 +494,7 @@
 
           <span class="eyebrow">03 / YOUR SPACE</span>
 
-          <h2>
+          <h2 id="find-space-title">
             How are you
             <em>arriving today?</em>
           </h2>
@@ -564,8 +566,9 @@
           </div>
 
           <p class="mood-disclaimer">
-            This is a simple check-in on this page.
-            Your selection is not saved or sent to ASAI.
+            This is a simple interactive check-in on this page.
+            Your selection is not saved, transmitted or sent to ASAI.
+            It is not a mental health assessment or a substitute for professional support.
           </p>
 
           <div
@@ -608,7 +611,7 @@
     </section>
 
     <!-- TRUST AND PRIVACY -->
-    <section class="trust section-padding" id="trust">
+    <section class="trust section-padding" id="trust" aria-labelledby="trust-title">
 
       <div class="container">
 
@@ -616,7 +619,7 @@
 
           <span class="eyebrow">04 / A SPACE BUILT ON TRUST</span>
 
-          <h2>
+          <h2 id="trust-title">
             Nothing you bring here
             <em>should be taken lightly.</em>
           </h2>
@@ -694,7 +697,7 @@
     </section>
 
     <!-- JOURNEY -->
-    <section class="journey section-padding" id="journey">
+    <section class="journey section-padding" id="journey" aria-labelledby="journey-title">
 
       <div class="container">
 
@@ -702,7 +705,7 @@
 
           <div>
             <span class="eyebrow">05 / THE ASAI EXPERIENCE</span>
-            <h2>Your journey.<br><em>Your own pace.</em></h2>
+            <h2 id="journey-title">Your journey.<br><em>Your own pace.</em></h2>
           </div>
 
           <p>
@@ -745,7 +748,7 @@
     </section>
 
     <!-- COMMUNITY -->
-    <section class="community section-padding" id="community">
+    <section class="community section-padding" id="community" aria-labelledby="community-title">
 
       <div class="container">
 
@@ -755,7 +758,7 @@
 
             <span class="eyebrow">06 / THE POWER OF CONNECTION</span>
 
-            <h2>
+            <h2 id="community-title">
               Healing feels different
               <em>when you're not alone.</em>
             </h2>
@@ -825,7 +828,7 @@
     </section>
 
     <!-- PRACTITIONERS -->
-    <section class="practitioners section-padding" id="practitioners">
+    <section class="practitioners section-padding" id="practitioners" aria-labelledby="practitioners-title">
 
       <div class="container practitioner-grid">
 
@@ -842,7 +845,7 @@
 
           <span class="eyebrow">07 / FOR PRACTITIONERS</span>
 
-          <h2>
+          <h2 id="practitioners-title">
             Are you the person
             <em>someone is searching for?</em>
           </h2>
@@ -874,7 +877,7 @@
     </section>
 
     <!-- INSTITUTIONAL WELLNESS -->
-    <section class="services section-padding" id="programmes">
+    <section class="services section-padding" id="programmes" aria-labelledby="programmes-title">
 
       <div class="container">
 
@@ -882,13 +885,14 @@
 
           <div>
             <span class="eyebrow">08 / WELLBEING AT EVERY LEVEL</span>
-            <h2>Better wellbeing.<br><em>Stronger communities.</em></h2>
+            <h2 id="programmes-title">Better wellbeing.<br><em>Stronger communities.</em></h2>
           </div>
 
           <p>
-            Explore the institutional wellbeing services
-            described by the original ASAI platform,
-            including programmes for teams and groups.
+            Explore institutional wellbeing areas described
+            in this concept, including possible programmes
+            for educational institutions, teams and groups.
+            Visit the original platform to confirm current offerings.
           </p>
 
         </div>
@@ -988,7 +992,7 @@
     </section>
 
     <!-- JOURNAL -->
-    <section class="find-space section-padding" id="journal">
+    <section class="find-space section-padding" id="journal" aria-labelledby="journal-title">
 
       <div class="container find-space-grid">
 
@@ -996,7 +1000,7 @@
 
           <span class="eyebrow">09 / SOULASAI JOURNAL</span>
 
-          <h2>
+          <h2 id="journal-title">
             Name it gently.
             <em>Then write it down.</em>
           </h2>
@@ -1040,7 +1044,7 @@
     </section>
 
     <!-- EMERGENCY SUPPORT -->
-    <section class="emergency section-padding" id="emergency">
+    <section class="emergency section-padding" id="emergency" aria-labelledby="emergency-title">
 
       <div class="container">
 
@@ -1048,7 +1052,7 @@
 
           <span class="eyebrow">10 / WHEN YOU NEED HELP NOW</span>
 
-          <h2>
+          <h2 id="emergency-title">
             Support should never
             <em>be out of reach.</em>
           </h2>
@@ -1056,8 +1060,8 @@
           <p>
             This website is not an emergency service or crisis
             counselling service. If you or someone else is in
-            immediate danger, contact your local emergency
-            service or go to the nearest emergency department.
+            immediate danger, contact your local emergency service
+            or go to the nearest emergency department.
           </p>
 
         </div>
@@ -1068,18 +1072,13 @@
             <span>EMERGENCY SUPPORT</span>
             <h3>Contact local emergency services</h3>
             <p>
-              If you are in Nigeria, 112 is commonly listed
-              as an emergency number. Availability may vary.
-              Seek another local emergency route if it does not connect.
+              Use the emergency contact number published
+              by the relevant authorities in your location.
+              If one route is unavailable, seek another
+              local emergency service or visit the nearest
+              emergency department.
             </p>
           </div>
-
-          <a
-            href="tel:112"
-            aria-label="Attempt to call emergency number 112"
-          >
-            112 <span aria-hidden="true">↗</span>
-          </a>
 
         </div>
 
@@ -1087,20 +1086,20 @@
           Emergency contact information should be verified with
           the relevant authorities before publication. This
           independent redesign does not provide crisis response
-          or guarantee that any telephone number is available.
+          or guarantee that any emergency service is available.
         </p>
 
       </div>
     </section>
 
     <!-- FINAL CTA -->
-    <section class="final-cta section-padding" id="contact">
+    <section class="final-cta section-padding" id="contact" aria-labelledby="final-cta-title">
 
       <div class="container final-cta-inner">
 
         <span class="eyebrow">YOUR SPACE IS WAITING</span>
 
-        <h2>
+        <h2 id="final-cta-title">
           You don't have to
           figure it all out
           <em>alone.</em>
@@ -1139,14 +1138,15 @@
 
         <div class="footer-brand">
 
-          <a href="#top" class="brand footer-logo">
+          <a href="#top" class="brand footer-logo" aria-label="Asai Community home">
             <span class="brand-mark" aria-hidden="true">a.</span>
             <span class="brand-name">asai<span>community</span></span>
           </a>
 
           <p>
-            A visual redesign concept exploring a more connected
-            experience of wellness for Africans and the diaspora.
+            An independent visual redesign concept exploring
+            a more connected experience of wellness for
+            Africans and the diaspora.
           </p>
 
         </div>
